@@ -15,30 +15,20 @@ struct LoginView: View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
             VStack(spacing: 16) {
                 TextField("email", text: viewStore.binding(\.$email))
-                    .textInputAutocapitalization(.never)
-                    .disableAutocorrection(true)
-                    .textFieldStyle(.roundedBorder)
+                    .modifier(TextFieldModifier())
                 SecureField("password", text: viewStore.binding(\.$password))
-                    .textInputAutocapitalization(.never)
-                    .disableAutocorrection(true)
-                    .textFieldStyle(.roundedBorder)
+                    .modifier(TextFieldModifier())
 
                 HStack {
                     Button("Login") {
                         viewStore.send(.loginButtonTapped)
                     }
-                    .buttonStyle(.bordered)
-                    .background(.blue)
-                    .foregroundColor(.white)
-                    .cornerRadius(8)
+                    .modifier(ButtonModifier(backgroundColor: .blue))
 
                     Button("Sign up") {
                         viewStore.send(.signUpButtonTapped)
                     }
-                    .buttonStyle(.bordered)
-                    .background(.green)
-                    .foregroundColor(.white)
-                    .cornerRadius(8)
+                    .modifier(ButtonModifier(backgroundColor: .green))
                 }
             }
             .padding()
@@ -52,5 +42,25 @@ struct ContentView_Previews: PreviewProvider {
             store: Store(initialState: LoginForm.State(),
                          reducer: LoginForm())
         )
+    }
+}
+
+struct TextFieldModifier: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .textInputAutocapitalization(.never)
+            .disableAutocorrection(true)
+            .textFieldStyle(.roundedBorder)
+    }
+}
+
+struct ButtonModifier: ViewModifier {
+    let backgroundColor: Color
+    func body(content: Content) -> some View {
+        content
+            .buttonStyle(.bordered)
+            .background(backgroundColor)
+            .foregroundColor(.white)
+            .cornerRadius(8)
     }
 }
