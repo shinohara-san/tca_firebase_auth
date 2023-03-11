@@ -6,6 +6,7 @@
 //
 
 import ComposableArchitecture
+import FirebaseAuth
 
 struct LoginForm: ReducerProtocol {
     struct State: Equatable {
@@ -16,7 +17,12 @@ struct LoginForm: ReducerProtocol {
     enum Action: BindableAction, Equatable {
         case binding(BindingAction<State>)
         case loginButtonTapped
+        case signUpButtonTapped
+        case loginResponse(TaskResult<Bool>)
+        case signUpResponse(TaskResult<Bool>)
     }
+
+    @Dependency(\.firebaseClient) var firebaseClient
 
     var body: some ReducerProtocol<State, Action> {
         BindingReducer()
@@ -25,8 +31,21 @@ struct LoginForm: ReducerProtocol {
             case .binding(_):
                 return .none
             case .loginButtonTapped:
+                return .task { [email = state.email, password = state.password] in
+                    await .loginResponse( TaskResult { try await self.firebaseClient.login(email, password) } )
+                }
+            case .signUpButtonTapped:
+                return .task { [email = state.email, password = state.password] in
+                    await .signUpResponse( TaskResult { try await self.firebaseClient.signup(email, password) } )
+                }
+            case let .loginResponse(isSuccessful):
+                print(isSuccessful)
+                return .none
+            case let .signUpResponse(isSuccessful):
+                print(isSuccessful)
                 return .none
             }
+
         }
     }
 }

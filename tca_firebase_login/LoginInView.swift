@@ -15,18 +15,31 @@ struct LoginView: View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
             VStack(spacing: 16) {
                 TextField("email", text: viewStore.binding(\.$email))
+                    .textInputAutocapitalization(.never)
                     .disableAutocorrection(true)
                     .textFieldStyle(.roundedBorder)
-                TextField("password", text: viewStore.binding(\.$password))
+                SecureField("password", text: viewStore.binding(\.$password))
+                    .textInputAutocapitalization(.never)
                     .disableAutocorrection(true)
                     .textFieldStyle(.roundedBorder)
-                Button("Login") {
-                    viewStore.send(.loginButtonTapped)
+
+                HStack {
+                    Button("Login") {
+                        viewStore.send(.loginButtonTapped)
+                    }
+                    .buttonStyle(.bordered)
+                    .background(.blue)
+                    .foregroundColor(.white)
+                    .cornerRadius(8)
+
+                    Button("Sign up") {
+                        viewStore.send(.signUpButtonTapped)
+                    }
+                    .buttonStyle(.bordered)
+                    .background(.green)
+                    .foregroundColor(.white)
+                    .cornerRadius(8)
                 }
-                .buttonStyle(.bordered)
-                .background(.blue)
-                .foregroundColor(.white)
-                .cornerRadius(8)
             }
             .padding()
         }

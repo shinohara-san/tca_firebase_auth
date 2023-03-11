@@ -17,6 +17,7 @@
 		1BEC89BB29BC302F002053D2 /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = 1BEC89BA29BC302F002053D2 /* ComposableArchitecture */; };
 		1BEC89BD29BC33EE002053D2 /* LoginForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BEC89BC29BC33EE002053D2 /* LoginForm.swift */; };
 		1BEC89BF29BC4E38002053D2 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BEC89BE29BC4E38002053D2 /* MainView.swift */; };
+		1BEC89C129BC5F1F002053D2 /* FirebaseClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BEC89C029BC5F1F002053D2 /* FirebaseClient.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +29,7 @@
 		1BEC89B229BC26B4002053D2 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "GoogleService-Info.plist"; sourceTree = SOURCE_ROOT; };
 		1BEC89BC29BC33EE002053D2 /* LoginForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginForm.swift; sourceTree = "<group>"; };
 		1BEC89BE29BC4E38002053D2 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
+		1BEC89C029BC5F1F002053D2 /* FirebaseClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseClient.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,6 +68,7 @@
 				1BEC89A429BC25AD002053D2 /* tca_firebase_loginApp.swift */,
 				1BEC89A629BC25AD002053D2 /* LoginInView.swift */,
 				1BEC89BC29BC33EE002053D2 /* LoginForm.swift */,
+				1BEC89C029BC5F1F002053D2 /* FirebaseClient.swift */,
 				1BEC89BE29BC4E38002053D2 /* MainView.swift */,
 				1BEC89B229BC26B4002053D2 /* GoogleService-Info.plist */,
 				1BEC89A829BC25AE002053D2 /* Assets.xcassets */,
@@ -164,6 +167,7 @@
 			files = (
 				1BEC89A729BC25AD002053D2 /* LoginInView.swift in Sources */,
 				1BEC89BF29BC4E38002053D2 /* MainView.swift in Sources */,
+				1BEC89C129BC5F1F002053D2 /* FirebaseClient.swift in Sources */,
 				1BEC89BD29BC33EE002053D2 /* LoginForm.swift in Sources */,
 				1BEC89A529BC25AD002053D2 /* tca_firebase_loginApp.swift in Sources */,
 			);
