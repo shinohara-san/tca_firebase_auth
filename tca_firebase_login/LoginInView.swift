@@ -32,6 +32,8 @@ struct LoginView: View {
                 }
             }
             .padding()
+            .alert(self.store.scope(state: \.alert),
+                   dismiss: .alertDismissed)
         }
     }
 }

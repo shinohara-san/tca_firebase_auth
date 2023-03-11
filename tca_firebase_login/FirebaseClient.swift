@@ -25,11 +25,11 @@ extension FirebaseClient: DependencyKey {
         login: { email, password in
             let result = try await Auth.auth().signIn(withEmail: email, password: password)
             let uid = result.user.uid
-            return !uid.isEmpty
+            return !uid.isEmpty // temp
         }, signup: { email, password in
             let result = try await Auth.auth().createUser(withEmail: email, password: password)
             let uid = result.user.uid
-            return !uid.isEmpty
+            return !uid.isEmpty // temp
         }
     )
 }

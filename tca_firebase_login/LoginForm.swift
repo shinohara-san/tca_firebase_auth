@@ -12,6 +12,7 @@ struct LoginForm: ReducerProtocol {
     struct State: Equatable {
         @BindingState var email = ""
         @BindingState var password = ""
+        var alert: AlertState<Action>?
     }
 
     enum Action: BindableAction, Equatable {
@@ -20,6 +21,7 @@ struct LoginForm: ReducerProtocol {
         case signUpButtonTapped
         case loginResponse(TaskResult<Bool>)
         case signUpResponse(TaskResult<Bool>)
+        case alertDismissed
     }
 
     @Dependency(\.firebaseClient) var firebaseClient
@@ -28,7 +30,7 @@ struct LoginForm: ReducerProtocol {
         BindingReducer()
         Reduce { state, action in
             switch action {
-            case .binding(_):
+            case .binding:
                 return .none
             case .loginButtonTapped:
                 return .task { [email = state.email.trimmingCharacters(in: .whitespacesAndNewlines),
@@ -40,11 +42,23 @@ struct LoginForm: ReducerProtocol {
                                 password = state.password.trimmingCharacters(in: .whitespacesAndNewlines)] in
                     await .signUpResponse( TaskResult { try await self.firebaseClient.signup(email, password) } )
                 }
-            case let .loginResponse(isSuccessful):
-                print(isSuccessful)
+            case let .loginResponse(_):
+                // TODO: Navigate to MainView
                 return .none
-            case let .signUpResponse(isSuccessful):
-                print(isSuccessful)
+            case let .signUpResponse(.success(_)):
+                state.alert = AlertState(title: {
+                    TextState("Register succeeded!")
+                }, message: {
+                    TextState("Please login with your id and password.")
+                })
+                return .none
+            case .signUpResponse(.failure):
+                state.alert = AlertState(title: {
+                    TextState("Register failed!")
+                })
+                return .none
+            case .alertDismissed:
+                state.alert = nil
                 return .none
             }
 
