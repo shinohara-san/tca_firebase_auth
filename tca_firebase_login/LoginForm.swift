@@ -13,6 +13,7 @@ struct LoginForm: ReducerProtocol {
         @BindingState var email = ""
         @BindingState var password = ""
         var alert: AlertState<Action>?
+        var isNavigationActive = false
     }
 
     enum Action: BindableAction, Equatable {
@@ -22,6 +23,8 @@ struct LoginForm: ReducerProtocol {
         case loginResponse(TaskResult<Bool>)
         case signUpResponse(TaskResult<Bool>)
         case alertDismissed
+        case setNavigation(isActive: Bool)
+        case setNavigationIsActiveDelayCompleted
     }
 
     @Dependency(\.firebaseClient) var firebaseClient
@@ -42,10 +45,15 @@ struct LoginForm: ReducerProtocol {
                                 password = state.password.trimmingCharacters(in: .whitespacesAndNewlines)] in
                     await .signUpResponse( TaskResult { try await self.firebaseClient.signup(email, password) } )
                 }
-            case let .loginResponse(_):
-                // TODO: Navigate to MainView
+            case .loginResponse(.success):
+                state.isNavigationActive = true
                 return .none
-            case let .signUpResponse(.success(_)):
+            case .loginResponse(.failure):
+                state.alert = AlertState(title: {
+                    TextState("Login failed!")
+                })
+                return .none
+            case .signUpResponse(.success):
                 state.alert = AlertState(title: {
                     TextState("Register succeeded!")
                 }, message: {
@@ -59,6 +67,13 @@ struct LoginForm: ReducerProtocol {
                 return .none
             case .alertDismissed:
                 state.alert = nil
+                return .none
+            case .setNavigation(isActive: true):
+                return .none
+            case .setNavigation(isActive: false):
+                state.isNavigationActive = false
+                return .none
+            case .setNavigationIsActiveDelayCompleted:
                 return .none
             }
 

@@ -20,10 +20,16 @@ struct LoginView: View {
                     .modifier(TextFieldModifier())
 
                 HStack {
-                    Button("Login") {
-                        viewStore.send(.loginButtonTapped)
+                    NavigationLink(
+                        destination: MainView(),
+                        isActive: viewStore.binding(
+                            get: \.isNavigationActive,
+                            send: LoginForm.Action.setNavigation(isActive:))) {
+                        Button("Login") {
+                            viewStore.send(.loginButtonTapped)
+                        }
+                        .modifier(ButtonModifier(backgroundColor: .blue))
                     }
-                    .modifier(ButtonModifier(backgroundColor: .blue))
 
                     Button("Sign up") {
                         viewStore.send(.signUpButtonTapped)
@@ -50,6 +56,7 @@ struct ContentView_Previews: PreviewProvider {
 struct TextFieldModifier: ViewModifier {
     func body(content: Content) -> some View {
         content
+            .multilineTextAlignment(.leading)
             .textInputAutocapitalization(.never)
             .disableAutocorrection(true)
             .textFieldStyle(.roundedBorder)
