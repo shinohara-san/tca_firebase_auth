@@ -31,11 +31,13 @@ struct LoginForm: ReducerProtocol {
             case .binding(_):
                 return .none
             case .loginButtonTapped:
-                return .task { [email = state.email, password = state.password] in
+                return .task { [email = state.email.trimmingCharacters(in: .whitespacesAndNewlines),
+                                password = state.password.trimmingCharacters(in: .whitespacesAndNewlines)] in
                     await .loginResponse( TaskResult { try await self.firebaseClient.login(email, password) } )
                 }
             case .signUpButtonTapped:
-                return .task { [email = state.email, password = state.password] in
+                return .task { [email = state.email.trimmingCharacters(in: .whitespacesAndNewlines),
+                                password = state.password.trimmingCharacters(in: .whitespacesAndNewlines)] in
                     await .signUpResponse( TaskResult { try await self.firebaseClient.signup(email, password) } )
                 }
             case let .loginResponse(isSuccessful):
