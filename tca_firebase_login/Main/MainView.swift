@@ -21,6 +21,15 @@ struct MainView: View {
             }
             .alert(self.store.scope(state: \.alert),
                    dismiss: .alertDismissed)
+            .fullScreenCover(
+              isPresented: viewStore.binding(
+                get: \.isSheetPresented,
+                send: Main.Action.setSheet(isPresented:)
+              )
+            ) {
+                LoginView(store: Store(initialState: LoginForm.State(),
+                                       reducer: LoginForm()))
+            }
         }
         .navigationTitle("Main View")
         .navigationBarBackButtonHidden(true)

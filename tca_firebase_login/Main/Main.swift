@@ -11,6 +11,7 @@ import FirebaseAuth
 struct Main: ReducerProtocol {
     struct State: Equatable {
         var alert: AlertState<Action>?
+        var isSheetPresented: Bool = false
     }
 
     enum Action: Equatable {
@@ -18,6 +19,7 @@ struct Main: ReducerProtocol {
         case logOut
         case logOutResponse(TaskResult<Bool>)
         case alertDismissed
+        case setSheet(isPresented: Bool)
     }
 
     @Dependency(\.firebaseClient) var firebaseClient
@@ -50,6 +52,11 @@ struct Main: ReducerProtocol {
             return .none
         case .alertDismissed:
             state.alert = nil
+            return .none
+        case .setSheet(isPresented: true):
+            return .none
+        case .setSheet(isPresented: false):
+            state.alert = AlertState{ TextState("Logout failed!") } // temp
             return .none
         }
     }
