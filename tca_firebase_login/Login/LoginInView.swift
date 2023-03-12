@@ -21,7 +21,9 @@ struct LoginView: View {
 
                 HStack {
                     NavigationLink(
-                        destination: MainView(),
+                        destination: MainView(
+                            store: Store(initialState: Main.State(),
+                                         reducer: Main())),
                         isActive: viewStore.binding(
                             get: \.isNavigationActive,
                             send: LoginForm.Action.setNavigation(isActive:))) {
