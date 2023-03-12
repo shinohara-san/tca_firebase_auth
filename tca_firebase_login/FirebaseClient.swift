@@ -11,6 +11,7 @@ import ComposableArchitecture
 struct FirebaseClient {
     var login: @Sendable (String, String) async throws -> Bool
     var signup: @Sendable (String, String) async throws -> Bool
+    var logout: () throws -> Bool
 }
 
 extension DependencyValues {
@@ -30,6 +31,14 @@ extension FirebaseClient: DependencyKey {
             let result = try await Auth.auth().createUser(withEmail: email, password: password)
             let uid = result.user.uid
             return !uid.isEmpty // temp
+        }, logout: {
+            try Auth.auth().signOut()
+            let currentUser = Auth.auth().currentUser
+            if let u = currentUser { // temp
+                return true
+            } else {
+                return false
+            }
         }
     )
 }

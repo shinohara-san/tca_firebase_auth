@@ -15,17 +15,38 @@ struct Main: ReducerProtocol {
 
     enum Action: Equatable {
         case logOutButtonTapped
+        case logOut
         case logOutResponse(TaskResult<Bool>)
         case alertDismissed
     }
 
+    @Dependency(\.firebaseClient) var firebaseClient
+
     func reduce(into state: inout State, action: Action) -> EffectTask<Action> {
         switch action {
         case .logOutButtonTapped:
+            state.alert = AlertState {
+                TextState("Log out")
+            } actions: {
+                ButtonState(role: .cancel) {
+                    TextState("Cancel")
+                }
+                ButtonState(action: .logOut) {
+                    TextState("Log out")
+                }
+            } message: {
+                TextState("Are you sure to log out?")
+            }
             return .none
+        case .logOut:
+            return .task { [] in
+                await .logOutResponse( TaskResult { try self.firebaseClient.logout()} ) // temp
+            }
         case .logOutResponse(.success):
+            // TODO: show LoginView
             return .none
         case .logOutResponse(.failure):
+            state.alert = AlertState{ TextState("Logout failed!") }
             return .none
         case .alertDismissed:
             state.alert = nil
