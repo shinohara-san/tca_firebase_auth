@@ -13,35 +13,38 @@ struct LoginView: View {
     
     var body: some View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
-            VStack(spacing: 16) {
-                TextField("email", text: viewStore.binding(\.$email))
-                    .modifier(TextFieldModifier())
-                SecureField("password", text: viewStore.binding(\.$password))
-                    .modifier(TextFieldModifier())
+            NavigationView {
+                VStack(spacing: 16) {
+                    TextField("email", text: viewStore.binding(\.$email))
+                        .modifier(TextFieldModifier())
+                    SecureField("password", text: viewStore.binding(\.$password))
+                        .modifier(TextFieldModifier())
 
-                HStack {
-                    NavigationLink(
-                        destination: MainView(
-                            store: Store(initialState: Main.State(),
-                                         reducer: Main())),
-                        isActive: viewStore.binding(
-                            get: \.isNavigationActive,
-                            send: LoginForm.Action.setNavigation(isActive:))) {
-                        Button("Login") {
-                            viewStore.send(.loginButtonTapped)
+                    HStack {
+                        NavigationLink(
+                            destination: MainView(
+                                store: Store(initialState: Main.State(),
+                                             reducer: Main())),
+                            isActive: viewStore.binding(
+                                get: \.isNavigationActive,
+                                send: LoginForm.Action.setNavigation(isActive:))) {
+                                    Button("Login") {
+                                        viewStore.send(.loginButtonTapped)
+                                    }
+                                }
+                                .modifier(ButtonModifier(backgroundColor: .blue))
+
+                        Button("Sign up") {
+                            viewStore.send(.signUpButtonTapped)
                         }
-                        .modifier(ButtonModifier(backgroundColor: .blue))
+                        .modifier(ButtonModifier(backgroundColor: .green))
                     }
-
-                    Button("Sign up") {
-                        viewStore.send(.signUpButtonTapped)
-                    }
-                    .modifier(ButtonModifier(backgroundColor: .green))
                 }
+                .padding()
+                .alert(self.store.scope(state: \.alert),
+                       dismiss: .alertDismissed)
             }
-            .padding()
-            .alert(self.store.scope(state: \.alert),
-                   dismiss: .alertDismissed)
+
         }
     }
 }

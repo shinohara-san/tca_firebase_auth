@@ -45,7 +45,7 @@ struct Main: ReducerProtocol {
                 await .logOutResponse( TaskResult { try self.firebaseClient.logout()} ) // temp
             }
         case .logOutResponse(.success):
-            // TODO: show LoginView
+            state.isSheetPresented = true
             return .none
         case .logOutResponse(.failure):
             state.alert = AlertState{ TextState("Logout failed!") }
